@@ -1,6 +1,7 @@
 
 import sqlite3 as lite
 import pandas as pd
+import sys as sys
 
 # Connect to the database
 con = lite.connect('getting_started.db')
@@ -28,16 +29,19 @@ with con:
   df = pd.DataFrame(rows, columns=cols)
 
 # Print out the resulting city and state in a full sentence. For example: "The cities that are warmest in July are: Las Vegas, NV, Atlanta, GA..."
-JulyCities = []
+MonthCities = []
 for row in df.iterrows():
-	if row[1][4] == 'July':
-		JulyCities.append(row[1][2])
+	if row[1][4] == sys.argv[1]:
+		MonthCities.append(row[1][2])
 
-printStr = 'The cities that are warmest in July are: '
-for city in JulyCities:
-	printStr += city + ', '
+if len(MonthCities) == 0:
+  print 'No cities have the warmest month in ' + sys.argv[1]
+else:
+  printStr = 'The cities that are warmest in ' + sys.argv[1] + ' are: '
+  for city in MonthCities:
+  	printStr += city + ', '
 
-print str(printStr[:-2])
+  print str(printStr[:-2])
 
 
 
